@@ -1,0 +1,19 @@
+SQLActions[ ] = {
+
+"BEGIN INSTALL
+
+create or replace procedure network_install(
+    jarUrl varchar(65535))
+language java
+no sql
+external name 'thisjar:com.dynamobi.network.client.DynamoNetworkUDR.install';
+
+END INSTALL",
+
+"BEGIN REMOVE
+
+drop procedure network_install;
+
+END REMOVE"
+
+}

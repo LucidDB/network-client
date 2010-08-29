@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build-project" name="luciddb-postgres-adapter">
+	
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="network.client.jar" value="${build.dir}/dynamo-network.jar"/>
+
+    <path id="classpath">
+        <pathelement location="classes"/>
+    </path>
+    <target name="init">
+        <mkdir dir="classes"/>
+        <copy includeemptydirs="false" todir="classes">
+            <fileset dir="src" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="init" name="build-project">
+        <javac debug="true" destdir="classes" >
+            <src path="src"/>
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+	
+	
+	<target name="package-network-client-jar" depends="build-project">
+		<jar destfile="${network.client.jar}">
+			<fileset dir="classes" id="id">
+    			<include name="**/*.class"/>
+    		</fileset>
+			<fileset dir="install">
+				<include name="deployment.txt"/>
+			</fileset>
+			<manifest>
+			        <section name="deployment.txt"> 
+			          <attribute 
+			             name="SQLJDeploymentDescriptor" 
+			             value="TRUE" />
+			        </section>
+			      </manifest>
+
+		</jar>
+	</target>
+</project>
