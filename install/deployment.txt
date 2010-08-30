@@ -5,14 +5,23 @@ SQLActions[ ] = {
 create or replace procedure network_install(
     jarUrl varchar(65535))
 language java
-no sql
+READS SQL DATA
 external name 'thisjar:com.dynamobi.network.client.DynamoNetworkUDR.install';
+
+create or replace view network_plugins as 
+select * from
+(values 
+  ('http://www.dynamobi.com/network/luciddb-postgres-adapter-catalog.jar', 'luciddb_postgres_adapter_catalog', 'pg_catalog', '1.0')
+  ,('http://www.dynamobi.com/network/regexudf.jar', 'regex', 'applib', '1.0')
+) as t1( URL, JARNAME, SCHEMA_NAME, VERSION);
+
 
 END INSTALL",
 
 "BEGIN REMOVE
 
 drop procedure network_install;
+drop view network_plugins;
 
 END REMOVE"
 
