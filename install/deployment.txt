@@ -9,11 +9,16 @@ READS SQL DATA
 external name 'thisjar:com.dynamobi.network.client.DynamoNetworkUDR.install';
 
 create or replace view network_plugins as 
-select * from
-(values 
-  ('http://www.dynamobi.com/network/luciddb-postgres-adapter-catalog.jar', 'luciddb_postgres_adapter_catalog', 'pg_catalog', '1.0')
-  ,('http://www.dynamobi.com/network/regexudf.jar', 'regex', 'applib', '1.0')
-) as t1( URL, JARNAME, SCHEMA_NAME, VERSION);
+select * from table ( 
+applib.read_rows_from_file ( cursor ( 
+select 
+  cast (null as varchar(256)) as "URL", 
+  cast (null as varchar(256)) as "JARNAME",  
+  cast (null as varchar(256)) as "SCHEMA_NAME",  
+  cast (null as varchar(256)) as "VERSION" from (values (0))
+)
+,  'http://www.dynamobi.com/network/index.data'
+, false) ) ;
 
 
 END INSTALL",
